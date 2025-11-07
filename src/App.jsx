@@ -51,12 +51,37 @@ const App = () => {
 
     // console.log(response);
     let JSONdata = await response.json();
-    // console.log(JSONdata.results)
+    console.log(`initial results`, JSONdata.results)
     // console.log(`starships`, starships);
 
     const searchedStarships = JSONdata.results
     setStarships(searchedStarships)
+    setStarshipCount(JSONdata.results.length)
 
+    let nextPageUrl = JSONdata.next
+
+    while(nextPageUrl != null) {
+      console.log(`next page url`, nextPageUrl);
+      let response = await fetch(nextPageUrl);
+      let nextPageJSONdata = await response.json();
+      console.log(`nextPageJSONdata`, nextPageJSONdata);
+      console.log(`nextPageJSONdata.results`, nextPageJSONdata.results);
+      let expandedStarships = [...searchedStarships, ...nextPageJSONdata.results]
+      setStarships(expandedStarships)
+      setStarshipCount(expandedStarships.length)
+      nextPageUrl = nextPageJSONdata.next
+      console.log(`nextPageUrl`, nextPageUrl);
+    }
+
+    // if(JSONdata.next != null) {
+    //   const SEARCH_URL_NEXT_PAGE = JSONdata.next
+    //   console.log('pre JSONdata', JSONdata);
+      
+      
+    //   console.log('post JSONdata_next', JSONdata_next);
+
+
+    // }
   }
 
 
