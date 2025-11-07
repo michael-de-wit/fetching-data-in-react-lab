@@ -6,6 +6,7 @@ import './App.css';
 const App = () => {
 
   const [starships, setStarships] = useState([]);
+  const [starshipCount, setStarshipCount] = useState([]);
 
   const BASE_URL = `https://swapi.dev/api/starships/?format=json`;
 
@@ -18,9 +19,9 @@ const App = () => {
       // console.log(response);
       let JSONdata = await response.json(response)
 
-      console.log(JSONdata.results)
-
+      console.log(JSONdata.results);
       setStarships(JSONdata.results)
+      setStarshipCount(JSONdata.results.length)
 
     }
 
@@ -55,22 +56,24 @@ const App = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      {/* <form onSubmit={handleSubmit}>
         Please enter your city name for the weather:
         <input type="text" onChange={handleChange} />
         <input type="submit" value="Get my forecast!" />
-      </form>
-      {/* add the below */}
-      <h1> Starships:</h1>
+      </form> */}
+      <h1> Starships ({starshipCount})</h1>
       <ul>
         {starships.map((starship, index) => (
           <li key={index}>
-            <p className='starship'>{starship.name}</p>
+            <p className='starship-name'>{starship.name}</p>
+            <div className='starship-info-box'>
+              <p className='starship-info'><span className='starship-info-label'>class</span>: {starship.starship_class}</p>
+              <p className='starship-info'><span className='starship-info-label'>manufacturer</span>: {starship.manufacturer}</p>
+              <p className='starship-info'><span className='starship-info-label'>model</span>: {starship.model}</p>
+            </div>
           </li>
         ))}
       </ul>
-      {/* <p>Temperature: {temperature}</p> */}
-      {/* <p>Conditions: {conditions}</p> */}
     </>
   );
 }
