@@ -3,11 +3,14 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 
+import Results from './components/Results/Results.jsx';
+
+
 const App = () => {
 
-  const [starships, setStarships] = useState([]);
   const [starshipCount, setStarshipCount] = useState([]);
   const [starshipToSearch, setStarshipToSearch] = useState([]);
+  const [starships, setStarships] = useState([]);
 
   const BASE_URL = `https://swapi.dev/api/starships/?format=json`;
 
@@ -20,10 +23,10 @@ const App = () => {
       // console.log(response);
       let JSONdata = await response.json(response)
 
-      console.log(JSONdata.results);
+      // console.log(JSONdata.results);
       setStarships(JSONdata.results)
       setStarshipCount(JSONdata.results.length)
-
+      // console.log('STAR', starships);
     }
 
     // console.log("load");
@@ -51,7 +54,7 @@ const App = () => {
 
     // console.log(response);
     let JSONdata = await response.json();
-    console.log(`initial results`, JSONdata.results)
+    // console.log(`initial results`, JSONdata.results)
     // console.log(`starships`, starships);
 
     const searchedStarships = JSONdata.results
@@ -73,15 +76,7 @@ const App = () => {
       console.log(`nextPageUrl`, nextPageUrl);
     }
 
-    // if(JSONdata.next != null) {
-    //   const SEARCH_URL_NEXT_PAGE = JSONdata.next
-    //   console.log('pre JSONdata', JSONdata);
-      
-      
-    //   console.log('post JSONdata_next', JSONdata_next);
 
-
-    // }
   }
 
 
@@ -93,18 +88,7 @@ const App = () => {
         <input type="text" onChange={handleChange} />
         <input type="submit" value="Search" />
       </form>
-      <ul>
-        {starships.map((starship, index) => (
-          <li key={index}>
-            <p className='starship-name'>{starship.name}</p>
-            <div className='starship-info-box'>
-              <p className='starship-info'><span className='starship-info-label'>class</span>: {starship.starship_class}</p>
-              <p className='starship-info'><span className='starship-info-label'>manufacturer</span>: {starship.manufacturer}</p>
-              <p className='starship-info'><span className='starship-info-label'>model</span>: {starship.model}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <Results starships={starships} />
     </>
   );
 }
