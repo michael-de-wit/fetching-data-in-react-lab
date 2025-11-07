@@ -7,6 +7,7 @@ const App = () => {
 
   const [starships, setStarships] = useState([]);
   const [starshipCount, setStarshipCount] = useState([]);
+  const [starshipToSearch, setStarshipToSearch] = useState([]);
 
   const BASE_URL = `https://swapi.dev/api/starships/?format=json`;
 
@@ -33,35 +34,40 @@ const App = () => {
 
 
   const handleChange = (event) => {
-    // setCity(event.target.value);
+    setStarshipToSearch(event.target.value);
   }
 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // console.log(starshipToSearch);
+
+    const SEARCH_URL = `https://swapi.dev/api/starships/?search=${starshipToSearch}&format=json`;
+    // console.log(SEARCH_URL);
+
     let response = await fetch(
-      BASE_URL
+      SEARCH_URL
     );
 
-    console.log(response);
+    // console.log(response);
     let JSONdata = await response.json();
-    console.log(JSONdata)
+    // console.log(JSONdata.results)
+    // console.log(`starships`, starships);
 
-    // setLocation(JSONdata.location.name)
-    // setTemperature(JSONdata.current.temp_f)
-    // setConditions(JSONdata.current.condition.text)
+    const searchedStarships = JSONdata.results
+    setStarships(searchedStarships)
 
   }
 
 
   return (
     <>
-      {/* <form onSubmit={handleSubmit}>
-        Please enter your city name for the weather:
-        <input type="text" onChange={handleChange} />
-        <input type="submit" value="Get my forecast!" />
-      </form> */}
       <h1> Starships ({starshipCount})</h1>
+      <form onSubmit={handleSubmit}>
+        Starship search:
+        <input type="text" onChange={handleChange} />
+        <input type="submit" value="Search" />
+      </form>
       <ul>
         {starships.map((starship, index) => (
           <li key={index}>
